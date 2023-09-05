@@ -5,7 +5,7 @@ BUILD=202112181
 PASS=$(openssl rand -base64 32|sha256sum|base64|head -c 32| tr '[:upper:]' '[:lower:]')
 DBPASS=$(openssl rand -base64 24|sha256sum|base64|head -c 32| tr '[:upper:]' '[:lower:]')
 SERVERID=$(openssl rand -base64 12|sha256sum|base64|head -c 32| tr '[:upper:]' '[:lower:]')
-REPO=yolanmees/Spikster
+REPO=onglai7000/wibbles
 if [ -z "$1" ];
     BRANCH=latest
 then
@@ -34,7 +34,7 @@ bgpurple=$(tput setab 5)
 
 
 
-#################################################### Spikster SETUP ######
+#################################################### wibbles SETUP ######
 
 
 
@@ -69,15 +69,9 @@ if [ "$ID" = "ubuntu" ]; then
         20.04)
             break
             ;;
-        22.04)
-            break
-            ;;
-        23.04)
-            break
-            ;;
         *)
             echo "${bgred}${white}${bold}"
-            echo "Spikster requires a minimum of Linux Ubuntu 20.04 LTS"
+            echo "wibbles requires Linux Ubuntu 20.04 LTS"
             echo "${reset}"
             exit 1;
             break
@@ -85,7 +79,7 @@ if [ "$ID" = "ubuntu" ]; then
     esac
 else
     echo "${bgred}${white}${bold}"
-    echo "Spikster requires a minimum requires Linux Ubuntu 20.04 LTS"
+    echo "wibbles requires Linux Ubuntu 20.04 LTS"
     echo "${reset}"
     exit 1
 fi
@@ -105,7 +99,7 @@ if [ "$(id -u)" = "0" ]; then
 else
     clear
     echo "${bgred}${white}${bold}"
-    echo "You have to run Spikster as root. (In AWS use 'sudo -s')"
+    echo "You have to run wibbles as root. (In AWS use 'sudo -s')"
     echo "${reset}"
     exit 1
 fi
@@ -183,33 +177,33 @@ alias ll='ls -alF'
 
 
 
-# Spikster DIRS
+# wibbles DIRS
 clear
 echo "${bggreen}${black}${bold}"
-echo "Spikster directories..."
+echo "wibbles directories..."
 echo "${reset}"
 sleep 1s
 
-sudo mkdir /etc/spikster/
-sudo chmod o-r /etc/spikster
-sudo mkdir /var/spikster/
-sudo chmod o-r /var/spikster
+sudo mkdir /etc/wibbles/
+sudo chmod o-r /etc/wibbles
+sudo mkdir /var/wibbles/
+sudo chmod o-r /var/wibbles
 
 
 
 # USER
 clear
 echo "${bggreen}${black}${bold}"
-echo "Spikster root user..."
+echo "wibbles root user..."
 echo "${reset}"
 sleep 1s
 
 sudo pam-auth-update --package
 sudo mount -o remount,rw /
 sudo chmod 640 /etc/shadow
-sudo useradd -m -s /bin/bash cipi
-echo "cipi:$PASS"|sudo chpasswd
-sudo usermod -aG sudo cipi
+sudo useradd -m -s /bin/bash wibbles
+echo "wibbles:$PASS"|sudo chpasswd
+sudo usermod -aG sudo wibbles
 
 
 # NGINX
@@ -290,7 +284,7 @@ sudo apt-get -y install php7.4-imagick
 sudo apt-get -y install php7.4-fileinfo
 sudo apt-get -y install php7.4-imap
 sudo apt-get -y install php7.4-cli
-PHPINI=/etc/php/7.4/fpm/conf.d/cipi.ini
+PHPINI=/etc/php/7.4/fpm/conf.d/wibbles.ini
 sudo touch $PHPINI
 sudo cat > "$PHPINI" <<EOF
 memory_limit = 256M
@@ -322,7 +316,7 @@ sudo apt-get -y install php8.0-imagick
 sudo apt-get -y install php8.0-fileinfo
 sudo apt-get -y install php8.0-imap
 sudo apt-get -y install php8.0-cli
-PHPINI=/etc/php/8.0/fpm/conf.d/cipi.ini
+PHPINI=/etc/php/8.0/fpm/conf.d/wibbles.ini
 sudo touch $PHPINI
 sudo cat > "$PHPINI" <<EOF
 memory_limit = 256M
@@ -354,7 +348,7 @@ sudo apt-get -y install php8.1-imagick
 sudo apt-get -y install php8.1-fileinfo
 sudo apt-get -y install php8.1-imap
 sudo apt-get -y install php8.1-cli
-PHPINI=/etc/php/8.1/fpm/conf.d/cipi.ini
+PHPINI=/etc/php/8.1/fpm/conf.d/wibbles.ini
 sudo touch $PHPINI
 sudo cat > "$PHPINI" <<EOF
 memory_limit = 256M
@@ -364,38 +358,6 @@ max_execution_time = 180
 max_input_time = 180
 EOF
 sudo service php8.1-fpm restart
-
-sudo apt-get -y install php8.2-fpm
-sudo apt-get -y install php8.2-common
-sudo apt-get -y install php8.2-curl
-sudo apt-get -y install php8.2-openssl
-sudo apt-get -y install php8.2-bcmath
-sudo apt-get -y install php8.2-mbstring
-sudo apt-get -y install php8.2-tokenizer
-sudo apt-get -y install php8.2-mysql
-sudo apt-get -y install php8.2-sqlite3
-sudo apt-get -y install php8.2-pgsql
-sudo apt-get -y install php8.2-redis
-sudo apt-get -y install php8.2-memcached
-sudo apt-get -y install php8.2-json
-sudo apt-get -y install php8.2-zip
-sudo apt-get -y install php8.2-xml
-sudo apt-get -y install php8.2-soap
-sudo apt-get -y install php8.2-gd
-sudo apt-get -y install php8.2-imagick
-sudo apt-get -y install php8.2-fileinfo
-sudo apt-get -y install php8.2-imap
-sudo apt-get -y install php8.2-cli
-PHPINI=/etc/php/8.2/fpm/conf.d/cipi.ini
-sudo touch $PHPINI
-sudo cat > "$PHPINI" <<EOF
-memory_limit = 256M
-upload_max_filesize = 256M
-post_max_size = 256M
-max_execution_time = 180
-max_input_time = 180
-EOF
-sudo service php8.2-fpm restart
 
 # PHP EXTRA
 sudo apt-get -y install php-dev php-pear
@@ -408,7 +370,7 @@ echo "PHP CLI configuration..."
 echo "${reset}"
 sleep 1s
 
-sudo update-alternatives --set php /usr/bin/php8.2
+sudo update-alternatives --set php /usr/bin/php8.0
 
 
 
@@ -436,7 +398,7 @@ echo "${reset}"
 sleep 1s
 
 sudo apt-get -y install git
-sudo ssh-keygen -t rsa -C "git@github.com" -f /etc/spikster/github -q -P ""
+sudo ssh-keygen -t rsa -C "git@github.com" -f /etc/wibbles/github -q -P ""
 
 
 
@@ -493,7 +455,7 @@ server {
     }
 }
 EOF
-sudo mkdir /etc/nginx/spikster/
+sudo mkdir /etc/nginx/wibbles/
 sudo systemctl restart nginx.service
 
 
@@ -531,8 +493,8 @@ expect eof
 echo "$SECURE_MYSQL"
 /usr/bin/mysql -u root -p$DBPASS <<EOF
 use mysql;
-CREATE USER 'cipi'@'%' IDENTIFIED WITH mysql_native_password BY '$DBPASS';
-GRANT ALL PRIVILEGES ON *.* TO 'cipi'@'%' WITH GRANT OPTION;
+CREATE USER 'wibbles'@'%' IDENTIFIED WITH mysql_native_password BY '$DBPASS';
+GRANT ALL PRIVILEGES ON *.* TO 'wibbles'@'%' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 EOF
 
@@ -595,26 +557,26 @@ sleep 1s
 
 
 /usr/bin/mysql -u root -p$DBPASS <<EOF
-CREATE DATABASE IF NOT EXISTS cipi;
+CREATE DATABASE IF NOT EXISTS wibbles;
 EOF
 clear
 sudo rm -rf /var/www/html
-cd /var/www && git clone https://github.com/yolanmees/Spikster.git html
+cd /var/www && git clone https://github.com/$REPO.git html
 cd /var/www/html && git pull
 cd /var/www/html && git checkout $BRANCH
 cd /var/www/html && git pull
 cd /var/www/html && sudo unlink .env
 cd /var/www/html && sudo cp .env.example .env
 cd /var/www/html && php artisan key:generate
-sudo rpl -i -w "DB_USERNAME=dbuser" "DB_USERNAME=cipi" /var/www/html/.env
+sudo rpl -i -w "DB_USERNAME=dbuser" "DB_USERNAME=wibbles" /var/www/html/.env
 sudo rpl -i -w "DB_PASSWORD=dbpass" "DB_PASSWORD=$DBPASS" /var/www/html/.env
-sudo rpl -i -w "DB_DATABASE=dbname" "DB_DATABASE=cipi" /var/www/html/.env
+sudo rpl -i -w "DB_DATABASE=dbname" "DB_DATABASE=wibbles" /var/www/html/.env
 sudo rpl -i -w "APP_URL=http://localhost" "APP_URL=http://$IP" /var/www/html/.env
 sudo rpl -i -w "APP_ENV=local" "APP_ENV=production" /var/www/html/.env
-sudo rpl -i -w "CIPISERVERID" $SERVERID /var/www/html/database/seeders/DatabaseSeeder.php
-sudo rpl -i -w "CIPIIP" $IP /var/www/html/database/seeders/DatabaseSeeder.php
-sudo rpl -i -w "CIPIPASS" $PASS /var/www/html/database/seeders/DatabaseSeeder.php
-sudo rpl -i -w "CIPIDB" $DBPASS /var/www/html/database/seeders/DatabaseSeeder.php
+sudo rpl -i -w "wibblesSERVERID" $SERVERID /var/www/html/database/seeders/DatabaseSeeder.php
+sudo rpl -i -w "wibblesIP" $IP /var/www/html/database/seeders/DatabaseSeeder.php
+sudo rpl -i -w "wibblesPASS" $PASS /var/www/html/database/seeders/DatabaseSeeder.php
+sudo rpl -i -w "wibblesDB" $DBPASS /var/www/html/database/seeders/DatabaseSeeder.php
 sudo chmod -R o+w /var/www/html/storage
 sudo chmod -R 777 /var/www/html/storage
 sudo chmod -R o+w /var/www/html/bootstrap/cache
@@ -625,22 +587,22 @@ cd /var/www/html && php artisan key:generate
 cd /var/www/html && php artisan cache:clear
 cd /var/www/html && php artisan storage:link
 cd /var/www/html && php artisan view:cache
-cd /var/www/html && php artisan cipi:activesetupcount
-CIPIBULD=/var/www/html/public/build_$SERVERID.php
-sudo touch $CIPIBULD
-sudo cat > $CIPIBULD <<EOF
+cd /var/www/html && php artisan wibbles:activesetupcount
+wibblesBULD=/var/www/html/public/build_$SERVERID.php
+sudo touch $wibblesBULD
+sudo cat > $wibblesBULD <<EOF
 $BUILD
 EOF
-CIPIPING=/var/www/html/public/ping_$SERVERID.php
-sudo touch $CIPIPING
-sudo cat > $CIPIPING <<EOF
+wibblesPING=/var/www/html/public/ping_$SERVERID.php
+sudo touch $wibblesPING
+sudo cat > $wibblesPING <<EOF
 Up
 EOF
 PUBKEYGH=/var/www/html/public/ghkey_$SERVERID.php
 sudo touch $PUBKEYGH
 sudo cat > $PUBKEYGH <<EOF
 <?php
-echo exec("cat /etc/cipi/github.pub");
+echo exec("cat /etc/wibbles/github.pub");
 EOF
 cd /var/www/html && php artisan migrate --seed --force
 cd /var/www/html && php artisan config:cache
@@ -648,7 +610,7 @@ sudo chmod -R o+w /var/www/html/storage
 sudo chmod -R 775 /var/www/html/storage
 sudo chmod -R o+w /var/www/html/bootstrap/cache
 sudo chmod -R 775 /var/www/html/bootstrap/cache
-sudo chown -R www-data:cipi /var/www/html
+sudo chown -R www-data:wibbles /var/www/html
 
 
 
@@ -659,14 +621,14 @@ echo "Last steps..."
 echo "${reset}"
 sleep 1s
 
-sudo chown www-data:cipi -R /var/www/html
+sudo chown www-data:wibbles -R /var/www/html
 sudo chmod -R 750 /var/www/html
 sudo echo 'DefaultStartLimitIntervalSec=1s' >> /usr/lib/systemd/system/user@.service
 sudo echo 'DefaultStartLimitBurst=50' >> /usr/lib/systemd/system/user@.service
 sudo echo 'StartLimitBurst=0' >> /usr/lib/systemd/system/user@.service
 sudo systemctl daemon-reload
 
-TASK=/etc/cron.d/cipi.crontab
+TASK=/etc/cron.d/wibbles.crontab
 touch $TASK
 cat > "$TASK" <<EOF
 10 4 * * 7 certbot renew --nginx --non-interactive --post-hook "systemctl restart nginx.service"
@@ -675,7 +637,7 @@ cat > "$TASK" <<EOF
 20 5 * * 7 apt-get clean && apt-get autoclean
 50 5 * * * echo 3 > /proc/sys/vm/drop_caches && swapoff -a && swapon -a
 * * * * * cd /var/www/html && php artisan schedule:run >> /dev/null 2>&1
-5 2 * * * cd /var/www/html/utility/cipi-update && sh run.sh >> /dev/null 2>&1
+5 2 * * * cd /var/www/html/utility/wibbles-update && sh run.sh >> /dev/null 2>&1
 EOF
 crontab $TASK
 sudo systemctl restart nginx.service
@@ -684,17 +646,17 @@ sudo rpl -i -w "# PasswordAuthentication" "PasswordAuthentication" /etc/ssh/sshd
 sudo rpl -i -w "PasswordAuthentication no" "PasswordAuthentication yes" /etc/ssh/sshd_config
 sudo rpl -i -w "PermitRootLogin yes" "PermitRootLogin no" /etc/ssh/sshd_config
 sudo service sshd restart
-TASK=/etc/supervisor/conf.d/cipi.conf
+TASK=/etc/supervisor/conf.d/wibbles.conf
 touch $TASK
 cat > "$TASK" <<EOF
-[program:cipi-worker]
+[program:wibbles-worker]
 process_name=%(program_name)s_%(process_num)02d
 command=php /var/www/html/artisan queue:work --sleep=3 --tries=3 --max-time=3600
 autostart=true
 autorestart=true
 stopasgroup=true
 killasgroup=true
-user=cipi
+user=wibbles
 numprocs=8
 redirect_stderr=true
 stdout_logfile=/var/www/worker.log
@@ -708,7 +670,7 @@ sudo service supervisor restart
 # COMPLETE
 clear
 echo "${bggreen}${black}${bold}"
-echo "Spikster installation has been completed..."
+echo "wibbles installation has been completed..."
 echo "${reset}"
 sleep 1s
 
@@ -721,9 +683,9 @@ echo "***********************************************************"
 echo "                    SETUP COMPLETE"
 echo "***********************************************************"
 echo ""
-echo " SSH root user: cipi"
+echo " SSH root user: wibbles"
 echo " SSH root pass: $PASS"
-echo " MySQL root user: cipi"
+echo " MySQL root user: wibbles"
 echo " MySQL root pass: $DBPASS"
 echo ""
 echo " To manage your server visit: http://$IP"
