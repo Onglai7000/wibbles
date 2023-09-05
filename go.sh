@@ -428,8 +428,8 @@ fi
 sudo touch $NGINX
 sudo cat > "$NGINX" <<EOF
 server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
+    listen 8080 default_server;
+    listen [::]:8080 default_server;
     root /var/www/html/public;
     add_header X-Frame-Options "SAMEORIGIN";
     add_header X-XSS-Protection "1; mode=block";
